@@ -20,13 +20,26 @@ module RTurk
       end
     end
 
+    # Gives us access to a hitReviewPolicy builder attached to this HIT
+    #
+    # @param [PolicyName, Hash]
+    # @return [RTurk::HITReviewPolicy] The HITReviewPolicy if instantiated or nil
+    def hit_review_policy(*args)
+      unless args.empty?
+        @hit_review_policy ||= RTurk::HITReviewPolicy.new(*args)
+      else
+        @hit_review_policy
+      end
+    end
+
     def to_params
       super.merge(
         'HITTypeId'           => hit_type_id, 
         'MaxAssignments'      => (assignments || 1),
         'Question'            => question.to_params,
         'LifetimeInSeconds'   => (lifetime || 3600),
-        'RequesterAnnotation' => note
+        'RequesterAnnotation' => note,
+        'HITReviewPolicy'     => hit_review_policy.to_params
       )
     end
 

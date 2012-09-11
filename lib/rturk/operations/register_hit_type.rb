@@ -3,7 +3,6 @@ module RTurk
 
     attr_accessor :title, :description, :reward, :currency, :duration, :keywords, :auto_approval
 
-
     # @param [Symbol, Hash] qualification_key opts The unique qualification key
     # @option opts [Hash] :comparator A comparator and value e.g. :gt => 80
     # @option opts [Boolean] :boolean true or false
