@@ -48,4 +48,15 @@ describe RTurk::GetReviewResultsForHIT do
       @response.hit_review_report.agreed_answer.should == "answer_a"
     end
   end
+
+  describe "a response with a long history (failure and then acceptance)" do
+    before(:all) do
+      faker('get_review_results_for_hit-complex', :operation => 'GetReviewResultsForHIT')
+      @response = RTurk.GetReviewResultsForHIT(hit_id: "1234abcd")
+    end
+
+    it "should recognize the most recent value for agreed_answer_found" do
+      @response.hit_review_report.agreed_answer_found.should == true
+    end
+  end
 end
