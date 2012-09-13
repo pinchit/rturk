@@ -5,8 +5,7 @@ module RTurk
     attr_accessor :hit_id, :include_assignment_summary
 
     def parse(xml)
-      xml
-      # RTurk::GetHITResponse.new(xml)
+      RTurk::GetReviewResultsForHITResponse.new(xml)
     end
 
     def to_params
@@ -18,5 +17,4 @@ module RTurk
   def self.GetReviewResultsForHIT(*args, &blk)
     RTurk::GetReviewResultsForHIT.create(*args, &blk)
   end
-
 end
