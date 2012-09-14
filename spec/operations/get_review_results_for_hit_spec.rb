@@ -1,5 +1,4 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
-require 'pry'
 
 describe RTurk::GetReviewResultsForHIT do
   before(:all) do
@@ -33,30 +32,35 @@ describe RTurk::GetReviewResultsForHIT do
 
   describe "the hit review report" do
     it "should include review results" do
-      @response.hit_review_report.review_results.length.should == 5
+      @response.hit_review_report.review_results.length.should == 21
     end
 
     it "should include review actions" do
-      @response.hit_review_report.review_actions.length.should == 2
+      @response.hit_review_report.review_actions.length.should == 6
     end
 
-    it "should provide a reader for agreed_answer_found" do
-      @response.hit_review_report.agreed_answer_found.should == true
+    describe ".agreed_answer_found" do
+      it "should find the most recent value" do
+        @response.hit_review_report.agreed_answer_found.should == true
+      end
     end
 
-    it "should provide a reader for agreed_answer" do
-      @response.hit_review_report.agreed_answer.should == "answer_a"
-    end
-  end
-
-  describe "a response with a long history (failure and then acceptance)" do
-    before(:all) do
-      faker('get_review_results_for_hit-complex', :operation => 'GetReviewResultsForHIT')
-      @response = RTurk.GetReviewResultsForHIT(hit_id: "1234abcd")
+    describe ".agreed_answer" do
+      it "should provide the agreed on answer" do
+        @response.hit_review_report.agreed_answer.should == "answer_a"
+      end
     end
 
-    it "should recognize the most recent value for agreed_answer_found" do
-      @response.hit_review_report.agreed_answer_found.should == true
+    describe ".worker_agreement_score" do
+      it "gets the latest worker agreement score for a given assignment id" do
+        @response.hit_review_report.worker_agreement_score(
+          "2WBTUHYW2GTPRVNQANNM469YSA5LQ9"
+        ).should == 100
+
+        @response.hit_review_report.worker_agreement_score(
+          "2YG2GMMEGOOG8WP5O01A5SEIUGKAA9"
+        ).should == 0
+      end
     end
   end
 end

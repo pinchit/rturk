@@ -10,5 +10,10 @@ module RTurk
       el = @xml_obj.xpath('ReviewResult[Key="AgreedAnswer"][last()]/Value')
       el.inner_text unless el.length == 0
     end
+
+    def worker_agreement_score(assignment_id)
+      el = @xml_obj.xpath("ReviewResult[SubjectType='Assignment'][SubjectId='#{assignment_id}'][last()]/Value")
+      el.inner_text.to_i unless el.length == 0
+    end
   end
 end
